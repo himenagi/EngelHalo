@@ -1,59 +1,48 @@
-import { createBot, getBotIdFromToken, startBot, Intents, CreateSlashApplicationCommand, Bot, Interaction, InteractionResponseTypes } from "@discordeno/mod.ts";
+import { createBot, getBotIdFromToken, startBot, Intents } from "@discordeno/mod.ts";
+import "$std/dotenv/load.ts";
 
-import "$std/dotenv/load.ts"
+import { setInterval, startInterval, endInterval, nextInterval, changeInterval, showInterval } from "./commands/intervalManagement.ts"
 
-interface SlashCommand {
-    info: CreateSlashApplicationCommand;
-    response(bot: Bot, interaction: Interaction): Promise<void>;
-};
+// Deno KVを開く
+const kv: Deno.Kv = await Deno.openKv();
 
 // Botのトークンを.envから取得
 const BotToken: string = Deno.env.get("BOT_TOKEN")!;
-
-const HelloCommand: SlashCommand = {
-    // コマンド情報
-    info: {
-        name: "hello_world",
-        description: "こんにちはと返します。"
-    },
-    // コマンド内容
-    response: async (bot, interaction) => {
-        return await bot.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-            type: InteractionResponseTypes.ChannelMessageWithSource,
-            data: {
-                content: "こんにちは",
-                // エフェメラルメッセージ (https://discord.com/developers/docs/resources/message#message-object-message-flags)
-                flags: 1 << 6
-            }
-        });
-    }
-}
 
 // ボットの作成
 const bot = createBot({
     token: BotToken,
     botId: getBotIdFromToken(BotToken) as bigint,
-
-    intents: Intents.Guilds | Intents.GuildMessages,
-
+    intents: Intents.Guilds | Intents.GuildMessages | Intents.MessageContent,
     // イベント発火時に実行する関数など
     events: {
         // 起動時
         ready: (_bot, payload) => {
             console.log(`${payload.user.username} is ready!`);
         },
-        interactionCreate:async  (_bot, interaction) => {
-            await HelloCommand.response(bot, interaction);
+        // ユーザーによるメッセージ投稿時
+        messageCreate: async (_bot, message) => {
+            if (message.content.startsWith("?iset")) {
+                await setInterval(_bot, message, kv);
+            }
+            if (message.content.startsWith("?ishow")) {
+                await showInterval(_bot, message, kv);
+            }
+            if (message.content.startsWith("?istart")) {
+                await startInterval(_bot, message, kv);
+            }
+            if (message.content.startsWith("?ichange")) {
+                await changeInterval(_bot, message, kv);
+            }
+            if (message.content.startsWith("?inext")) {
+                await nextInterval(_bot, message, kv);
+            }
+            if (message.content.startsWith("?iend")) {
+                await endInterval(_bot, message, kv);
+            }
         }
     }
 });
-
-// コマンドの作成
-bot.helpers.createGlobalApplicationCommand(HelloCommand.info);
-
-// コマンドの登録
-bot.helpers.upsertGlobalApplicationCommands([HelloCommand.info]);
-
 
 await startBot(bot);
 
