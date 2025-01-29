@@ -1,7 +1,7 @@
 import { createBot, getBotIdFromToken, startBot, Intents } from "@discordeno/mod.ts";
 import "$std/dotenv/load.ts";
 
-import { setInterval, startInterval, endInterval, nextInterval, changeInterval, showInterval } from "./commands/intervalManagement.ts"
+import { setInterval, startInterval, endInterval, nextInterval, changeInterval, showInterval } from "./commands/interval_management.ts"
 
 // Deno KVを開く
 const kv: Deno.Kv = await Deno.openKv();
