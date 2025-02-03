@@ -25,7 +25,7 @@ export const setInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => {
         // 登録済の最大IDを更新
         await kv.set(["maxiid"], id);
 
-        _bot.helpers.sendMessage(message.channelId, { content: "登録しました。" });
+        _bot.helpers.sendMessage(message.channelId, { content: "登録しました。", messageReference: { messageId: message.id, failIfNotExists: false } });
     }
 }
 
@@ -35,7 +35,7 @@ export const showInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => 
     // 登録済の最大IDを取得
     const maxiid = (await kv.get<number>(["maxiid"])).value;
     if (maxiid == null) {
-        _bot.helpers.sendMessage(message.channelId, { content: "インターバル情報が登録されていません。" });
+        _bot.helpers.sendMessage(message.channelId, { content: "インターバル情報が登録されていません。", messageReference: { messageId: message.id, failIfNotExists: false } });
         return;
     }
 
@@ -46,7 +46,7 @@ export const showInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => 
         intervalInfos.push(`ID: ${i} キャラクター名: ${intervalInfo.name} インターバル: ${intervalInfo.interval}`);
     }
 
-    _bot.helpers.sendMessage(message.channelId, { content: intervalInfos.join("\n") });
+    _bot.helpers.sendMessage(message.channelId, { content: intervalInfos.join("\n"), messageReference: { messageId: message.id, failIfNotExists: false } });
 }
 
 // ?istart
@@ -54,7 +54,7 @@ export const showInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => 
 export const startInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => {
     // カウントを0にリセット
     await kv.set(["count"], 0);
-    _bot.helpers.sendMessage(message.channelId, { content: "インターバル管理を開始します。" });
+    _bot.helpers.sendMessage(message.channelId, { content: "インターバル管理を開始します。", messageReference: { messageId: message.id, failIfNotExists: false } });
 }
 
 // ?ichange
@@ -69,7 +69,7 @@ export const changeInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) =
         // インターバル情報を更新
         intervalInfo.interval = parseInt(words[2]);
         await kv.set([words[1]], intervalInfo);
-        _bot.helpers.sendMessage(message.channelId, { content: "インターバルを変更しました。" });
+        _bot.helpers.sendMessage(message.channelId, { content: "インターバルを変更しました。", messageReference: { messageId: message.id, failIfNotExists: false } });
     }
 }
 
@@ -125,7 +125,7 @@ export const nextInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => 
     }
 
     // 現在カウントと手番を迎えたIDを表示
-    _bot.helpers.sendMessage(message.channelId, { content: `カウント: ${count} 手番者: ${names.join(",")}` });
+    _bot.helpers.sendMessage(message.channelId, { content: `カウント: ${count} 手番者: ${names.join(",")}`, messageReference: { messageId: message.id, failIfNotExists: false } });
 }
 
 // ?iend
@@ -149,5 +149,5 @@ export const endInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => {
         await kv.delete([keys[i]]);
     }
 
-    _bot.helpers.sendMessage(message.channelId, { content: "インターバル管理を終了しました。" });
+    _bot.helpers.sendMessage(message.channelId, { content: "インターバル管理を終了しました。", messageReference: { messageId: message.id, failIfNotExists: false } });
 }
