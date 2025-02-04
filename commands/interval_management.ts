@@ -8,7 +8,7 @@ interface IntervalInfo {
 
 // ?iset
 // インターバル情報の登録
-// 引数：キャラクター名、インターバル
+// 引数: キャラクター名、インターバル
 export const setInterval = async (_bot: Bot, message: Message, kv: Deno.Kv) => {
     const words = message.content.split(" ");
     if (words.length >= 3) {

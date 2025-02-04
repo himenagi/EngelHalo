@@ -2,6 +2,7 @@ import { createBot, getBotIdFromToken, startBot, Intents } from "@discordeno/mod
 import "$std/dotenv/load.ts";
 
 import { setInterval, startInterval, endInterval, nextInterval, changeInterval, showInterval } from "./commands/interval_management.ts"
+import { questList, reward } from "./commands/reward.ts";
 
 // Deno KVを開く
 const kv: Deno.Kv = await Deno.openKv();
@@ -40,9 +41,24 @@ const bot = createBot({
             if (message.content.startsWith("?iend")) {
                 await endInterval(_bot, message, kv);
             }
+            if (message.content.startsWith("?reward")) {
+                await reward(_bot, message);
+            }
+        },
+        // スラッシュコマンド受信時
+        interactionCreate: async (_bot, interaction) => {
+            if (interaction.data?.name === "qlist") {
+                await questList.response(_bot, interaction);
+            }
         }
     }
 });
+
+// スラッシュコマンドの作成
+bot.helpers.createGlobalApplicationCommand(questList.info);
+
+// スラッシュコマンドの登録
+bot.helpers.upsertGlobalApplicationCommands([questList.info]);
 
 await startBot(bot);
 
