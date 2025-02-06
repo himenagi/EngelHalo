@@ -25,6 +25,7 @@ const quests = [
     "オメガランチャー討伐",
     "ブラックテンタクル討伐",
     "ワイバーン鎮圧",
+    "ワイバーン鎮圧(ハード)",
     "機械天使サリエル討伐"
 ];
 
@@ -200,6 +201,20 @@ export const reward = (_bot: Bot, message: Message) => {
                 }
                 break;
             case 17:
+                // ワイバーン鎮圧(ハード)
+                exp = 4000 + 40 * 10 * 4;
+                money = 4000;
+                dropItems.push({ name: "竜の牙", price: 500, num: 4 });
+                for (let i = 0; i < 4; i++) {
+                    if (getRandom(1, 100) >= 51) {
+                        dropnum++;
+                    }
+                }
+                if (dropnum >= 1) {
+                    dropItems.push({ name: "竜の鋭爪", price: 1000, num: dropnum });
+                }
+                break;
+            case 18:
                 // 機械天使サリエル討伐
                 exp = 3200 + 45 * 10 * 1;
                 money = 2500;
