@@ -26,7 +26,8 @@ const quests = [
     "ブラックテンタクル討伐",
     "ワイバーン鎮圧",
     "ワイバーン鎮圧(ハード)",
-    "機械天使サリエル討伐"
+    "機械天使サリエル討伐",
+    "翡翠の踊り子討伐"
 ];
 
 // ?reward
@@ -224,6 +225,14 @@ export const reward = (_bot: Bot, message: Message) => {
                     dropItems.push({ name: "魔導刃", price: 800, num: 1 });
                 } else {
                     dropItems.push({ name: "魔導銃", price: 1500, num: 1 });
+                }
+                break;
+            case 19:
+                // 翡翠の踊り子討伐
+                exp = 2600 + 40 * 10 * 1;
+                money = 2600;
+                if (getRandom(1, 100) >= 51) {
+                    dropItems.push({ name: "踊り子の葉", price: 500, num: 1 });
                 }
                 break;
         }
