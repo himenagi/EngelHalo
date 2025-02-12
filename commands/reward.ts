@@ -27,7 +27,8 @@ const quests = [
     "ワイバーン鎮圧",
     "ワイバーン鎮圧(ハード)",
     "機械天使サリエル討伐",
-    "翡翠の踊り子討伐"
+    "翡翠の踊り子討伐",
+    "プリズムフェアリー遭遇"
 ];
 
 // ?reward
@@ -234,6 +235,11 @@ export const reward = (_bot: Bot, message: Message) => {
                 if (getRandom(1, 100) >= 51) {
                     dropItems.push({ name: "踊り子の葉", price: 500, num: 1 });
                 }
+                break;
+            case 20:
+                // プリズムフェアリー遭遇
+                exp = 15000 + 40 * 10 * 1;
+                money = 15000;
                 break;
         }
 
