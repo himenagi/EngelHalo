@@ -28,7 +28,8 @@ const quests = [
     "ワイバーン鎮圧(ハード)",
     "機械天使サリエル討伐",
     "翡翠の踊り子討伐",
-    "プリズムフェアリー遭遇"
+    "プリズムフェアリー遭遇",
+    "ゴブリンシャーマン討伐"
 ];
 
 // ?reward
@@ -240,6 +241,17 @@ export const reward = (_bot: Bot, message: Message) => {
                 // プリズムフェアリー遭遇
                 exp = 15000 + 40 * 10 * 1;
                 money = 15000;
+                break;
+            case 21:
+                // ゴブリンシャーマン討伐
+                exp = 2000 + 30 * 10 * pcnum + 40 * 10 * 1;
+                money = 2600;
+                if (getRandom(1, 100) < 51) {
+                    dropItems.push({ name: "宝石", price: 200, num: 1 });
+                }
+                else {
+                    dropItems.push({ name: "豪華な装飾品", price: 500, num: 1 });
+                }
                 break;
         }
 
